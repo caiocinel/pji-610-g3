@@ -1,0 +1,308 @@
+@import "tailwindcss";
+
+/*
+ * Velas Luamme: tokens de design.
+ * Use SEMPRE estes tokens (bg-papel, text-tinta, border-linha…) em vez de white/black/gray/stone do Tailwind:
+ * eles mudam sozinhos no tema escuro e na impressão.
+ */
+@theme static {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  /* Superfícies */
+  --color-creme: #fbf7f1; /* fundo da página */
+  --color-papel: #ffffff; /* cartões, campos, menus */
+  --color-areia: #f4ede3; /* hover, cabeçalho de tabela, áreas de destaque suave */
+  --color-linha: #ece3d6; /* bordas e divisórias */
+  --color-linha-forte: #dccdb9; /* borda de botões secundários e divisórias mais marcadas */
+  --color-borda-campo: #9c8a76; /* contorno de campos de formulário (≥ 3:1 sobre papel/creme, WCAG 1.4.11) */
+
+  /* Texto */
+  --color-tinta: #2d2620; /* texto principal */
+  --color-suave: #6f6254; /* texto secundário (contraste AA sobre creme e papel) */
+  --color-sobre: #ffffff; /* texto sobre cores sólidas (botão primário, perigo sólido) */
+
+  /* Marca */
+  --color-chama: #b0602f;
+  --color-chama-escura: #8f4a22; /* hover do primário e texto sobre chama-clara */
+  --color-chama-clara: #f7e6d8;
+  --color-salvia: #4e6a4a;
+  --color-salvia-clara: #e4ece1;
+  --color-alerta: #a33a27;
+  --color-alerta-clara: #f8e1dc;
+  --color-info: #2f5f7a;
+  --color-info-clara: #e1edf3;
+  --color-mel: #8a6414; /* atenção (amarelo legível) */
+  --color-mel-clara: #f8edd2;
+
+  /* Série de cores para gráficos (recharts: stroke="var(--color-grafico-1)") */
+  --color-grafico-1: #b0602f;
+  --color-grafico-2: #5f7a5a;
+  --color-grafico-3: #c9962e;
+  --color-grafico-4: #7d5a7a;
+  --color-grafico-5: #3f7f9f;
+  --color-grafico-6: #a0786a;
+
+  --shadow-suave: 0 1px 2px rgb(45 38 32 / 0.05), 0 1px 3px rgb(45 38 32 / 0.06);
+  --shadow-elevado: 0 12px 32px -12px rgb(45 38 32 / 0.28), 0 4px 12px -6px rgb(45 38 32 / 0.12);
+
+  --animate-entrada: entrada 0.18s ease-out;
+  --animate-brilho: brilho 1.6s ease-in-out infinite;
+
+  @keyframes entrada {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes brilho {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
+}
+
+/*
+ * Tema escuro automático (segue o sistema). Para forçar o claro, coloque data-tema="claro" no <html>.
+ * Só na tela: a impressão é sempre clara.
+ */
+@media screen and (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    color-scheme: dark;
+    --color-creme: #16120f;
+    --color-papel: #201b17;
+    --color-areia: #2a231d;
+    --color-linha: #352d26;
+    --color-linha-forte: #4a4037;
+    --color-borda-campo: #7a6a5b;
+    --color-tinta: #f2ebe2;
+    --color-suave: #b3a596;
+    --color-sobre: #1c1814;
+    --color-chama: #e0925c;
+    --color-chama-escura: #f2b07f;
+    --color-chama-clara: #3a2618;
+    --color-salvia: #9cc093;
+    --color-salvia-clara: #1f2b1d;
+    --color-alerta: #ef8a74;
+    --color-alerta-clara: #3a1d17;
+    --color-info: #8cc0dc;
+    --color-info-clara: #172a35;
+    --color-mel: #e6c06a;
+    --color-mel-clara: #33280f;
+    --color-grafico-1: #e0925c;
+    --color-grafico-2: #9cc093;
+    --color-grafico-3: #e6c06a;
+    --color-grafico-4: #c49ac1;
+    --color-grafico-5: #8cc0dc;
+    --color-grafico-6: #d1a99a;
+  }
+}
+
+/* `dark:` do Tailwind segue a mesma regra do tema acima. Prefira tokens; use dark: só em último caso. */
+@custom-variant dark {
+  @media screen and (prefers-color-scheme: dark) {
+    &:where(:root:not([data-tema="claro"]) *) {
+      @slot;
+    }
+  }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html {
+    scrollbar-gutter: stable;
+  }
+  body {
+    background: var(--color-creme);
+    color: var(--color-tinta);
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-chama-clara);
+    color: var(--color-chama-escura);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-chama);
+    outline-offset: 2px;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  /* Trava a rolagem da página enquanto um diálogo/gaveta estiver aberto. */
+  html:has(dialog[open]:modal) {
+    overflow: hidden;
+  }
+  dialog::backdrop {
+    background: rgb(28 24 20 / 0.45);
+    backdrop-filter: blur(2px);
+  }
+  dialog[open] {
+    animation: entrada 0.18s ease-out;
+  }
+  dialog[data-gaveta][open] {
+    animation: gaveta-baixo 0.22s ease-out;
+  }
+  @media (min-width: 768px) {
+    dialog[data-gaveta="auto"][open],
+    dialog[data-gaveta="direita"][open] {
+      animation: gaveta-direita 0.22s ease-out;
+    }
+  }
+  @keyframes gaveta-baixo {
+    from {
+      transform: translateY(24px);
+      opacity: 0;
+    }
+  }
+  @keyframes gaveta-direita {
+    from {
+      transform: translateX(24px);
+      opacity: 0;
+    }
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ---------- Utilitários reutilizáveis ---------- */
+
+/* Campo de formulário: 44px no celular (alvo de toque e sem zoom no iOS), 40px no desktop. */
+@utility campo {
+  @apply h-11 w-full min-w-0 rounded-lg border border-borda-campo bg-papel px-3 text-base text-tinta shadow-suave
+    transition outline-none placeholder:text-suave hover:border-suave focus:border-chama focus:ring-3
+    focus:ring-chama/20 disabled:cursor-not-allowed disabled:bg-areia disabled:text-suave sm:h-10 sm:text-sm
+    aria-invalid:border-alerta aria-invalid:focus:ring-alerta/20;
+}
+@utility campo-area {
+  @apply campo h-auto min-h-24 py-2 leading-relaxed sm:h-auto;
+}
+@utility rotulo {
+  @apply mb-1.5 block text-sm font-medium text-tinta;
+}
+@utility dica {
+  @apply mt-1.5 text-xs text-suave;
+}
+
+@utility btn {
+  @apply inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium whitespace-nowrap
+    transition select-none active:translate-y-px disabled:pointer-events-none disabled:opacity-55
+    aria-disabled:pointer-events-none aria-disabled:opacity-55 sm:h-10 [&_svg]:size-4 [&_svg]:shrink-0;
+}
+@utility btn-primario {
+  @apply btn bg-chama text-sobre shadow-suave hover:bg-chama-escura;
+}
+@utility btn-secundario {
+  @apply btn border border-linha-forte bg-papel text-tinta shadow-suave hover:bg-areia;
+}
+@utility btn-fantasma {
+  @apply btn text-suave hover:bg-areia hover:text-tinta;
+}
+@utility btn-perigo {
+  @apply btn border border-alerta/35 bg-papel text-alerta hover:bg-alerta-clara;
+}
+
+/* Cartão base (o componente <Card> usa isto). */
+@utility cartao {
+  @apply rounded-xl border border-linha bg-papel shadow-suave;
+}
+
+/* Números alinhados em colunas (valores, quantidades). */
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Link de texto no corpo da página. */
+@utility link {
+  @apply font-medium text-chama-escura underline-offset-4 hover:underline;
+}
+
+/* Barra de rolagem discreta para áreas que rolam (tabelas, listas). */
+@utility rolagem-fina {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-linha-forte) transparent;
+}
+
+/* Esconde a barra de rolagem mantendo a rolagem (abas/chips horizontais). */
+@utility sem-barra {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Visível só na impressão (ex.: cabeçalho do recibo). Para esconder na impressão use `print:hidden`. */
+@utility so-impressao {
+  display: none;
+  @media print {
+    display: revert;
+  }
+}
+
+/* ---------- Impressão ---------- */
+@media print {
+  @page {
+    margin: 12mm;
+  }
+  :root {
+    color-scheme: light;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #000;
+    font-size: 12pt;
+  }
+  *,
+  ::before,
+  ::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  /* Elementos marcados com data-nao-imprimir somem (alternativa ao print:hidden). */
+  [data-nao-imprimir],
+  [data-sonner-toaster] {
+    display: none !important;
+  }
+  table {
+    break-inside: auto;
+  }
+  tr,
+  img,
+  .cartao {
+    break-inside: avoid;
+  }
+}

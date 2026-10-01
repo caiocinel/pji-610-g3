@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="fundo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c26c37"/>
+      <stop offset="1" stop-color="#94491f"/>
+    </linearGradient>
+    <radialGradient id="brilho" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffd9a8" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffd9a8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#fundo)"/>
+  <circle cx="256" cy="176" r="132" fill="url(#brilho)"/>
+  <path d="M388 70a42 42 0 1 0 22 74 32 32 0 1 1-22-74Z" fill="#f6d58e" opacity="0.9"/>
+  <path d="M256 70c38 50 60 88 60 128a60 60 0 0 1-120 0c0-40 22-78 60-128Z" fill="#fbf7f1"/>
+  <path d="M256 148c18 24 27 42 27 60a27 27 0 0 1-54 0c0-18 9-36 27-60Z" fill="#f2b07f"/>
+  <path d="M256 258v26" stroke="#fbf7f1" stroke-width="12" stroke-linecap="round"/>
+  <rect x="162" y="282" width="188" height="160" rx="26" fill="#fbf7f1"/>
+  <rect x="162" y="352" width="188" height="40" fill="#f7e6d8"/>
+  <path d="M256 360c6 8 10 14 10 20a10 10 0 0 1-20 0c0-6 4-12 10-20Z" fill="#b0602f"/>
+</svg>
